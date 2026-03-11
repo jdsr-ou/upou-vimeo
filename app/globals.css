@@ -160,6 +160,23 @@ li {
   font-size: 0.94rem;
 }
 
+.feature-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #f5ede1;
+  color: #4c3b24;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
 .warning {
   margin-top: 1rem;
   border-left: 4px solid #d97400;
@@ -351,6 +368,23 @@ th {
   padding: 1rem 0 1.5rem;
   color: #5f6b77;
   font-size: 0.9rem;
+}
+
+.details-grid {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.plan-details {
+  border: 1px solid #e6dbc8;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  background: #fffefb;
+}
+
+.plan-details summary {
+  cursor: pointer;
+  color: #3f2f1e;
 }
 
 @media (prefers-reduced-motion: reduce) {
