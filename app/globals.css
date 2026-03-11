@@ -183,20 +183,9 @@ li {
   font-size: 0.9rem;
 }
 
-.icon-dot {
-  width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 999px;
-  margin-top: 0.2rem;
+.legend-card img {
+  margin-top: 0.1rem;
   flex: 0 0 auto;
-}
-
-.storage-dot {
-  background: linear-gradient(90deg, #0f6a24 0%, #149632 100%);
-}
-
-.bandwidth-dot {
-  background: linear-gradient(90deg, #875100 0%, #cc7f00 100%);
 }
 
 .capacity-badge {
@@ -413,8 +402,33 @@ th {
   background: #fffdfa;
 }
 
+.feature-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+
 .feature-grid h3 {
   margin-top: 0;
+}
+
+.logo-strip {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.logo-card {
+  border: 1px solid #e8ddcd;
+  border-radius: 10px;
+  padding: 0.55rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fffefb;
+  font-size: 0.86rem;
+  color: #3b4a57;
 }
 
 .pros-cons {
@@ -496,7 +510,8 @@ th {
   .estimate-grid,
   .feature-grid,
   .pros-cons,
-  .alt-grid {
+  .alt-grid,
+  .logo-strip {
     grid-template-columns: 1fr;
   }
 

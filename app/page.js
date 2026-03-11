@@ -222,28 +222,41 @@ const enterpriseEstimates = [
   { label: "High estimate", annualUsd: 15000, style: "alt" }
 ];
 
+const platformLogos = [
+  { name: "Vimeo", icon: "/icons/vimeo.svg" },
+  { name: "Canvas", icon: "/icons/canvas.svg" },
+  { name: "Moodle", icon: "/icons/moodle.svg" },
+  { name: "Creative Commons", icon: "/icons/cc.svg" }
+];
+
 const featureData = {
   lms: {
+    icon: "/icons/lms.svg",
     title: "LMS Interoperability (LTI 1.3)",
     desc: "Vimeo uses LTI 1.3 Advantage for integration with Canvas and Moodle. Videos embed directly in courses, and interactive elements like quizzes can sync to the LMS gradebook."
   },
   branding: {
+    icon: "/icons/branding.svg",
     title: "Custom Institutional Branding",
     desc: "Vimeo supports white-label player customization. UPOU can apply institutional colors and logo and remove Vimeo marks for a consistent university experience."
   },
   translation: {
+    icon: "/icons/translation.svg",
     title: "Global Auto-Translation",
     desc: "Vimeo provides AI-driven transcripts and multilingual captions. This reduces manual production effort and expands reach for international ODeL learners."
   },
   security: {
+    icon: "/icons/security.svg",
     title: "Domain-Level Security",
     desc: "Playback can be limited to authorized UPOU domains. If an embed is copied to an unauthorized site, the video can be blocked."
   },
   oer: {
+    icon: "/icons/oer.svg",
     title: "Native OER Support (Creative Commons)",
     desc: "Faculty can apply Creative Commons licenses to lectures directly in Vimeo, improving discoverability in global open-education search channels."
   },
   access: {
+    icon: "/icons/accessibility.svg",
     title: "Accessibility Compliance",
     desc: "Vimeo supports AI captions, transcripts, and screen-reader-friendly navigation to align with inclusive design requirements."
   }
@@ -368,12 +381,24 @@ export default function Home() {
             commercial model.
           </p>
 
+          <div className="logo-strip" aria-label="Platform logos">
+            {platformLogos.map((logo) => (
+              <article className="logo-card" key={logo.name}>
+                <img src={logo.icon} alt={`${logo.name} logo`} width="28" height="28" />
+                <span>{logo.name}</span>
+              </article>
+            ))}
+          </div>
+
           <h3>Core Features</h3>
 
           <div className="feature-grid">
             {featureItems.map((feature) => (
               <article key={feature.title}>
-                <h3>{feature.title}</h3>
+                <div className="feature-title-row">
+                  <img src={feature.icon} alt="" width="20" height="20" aria-hidden="true" />
+                  <h3>{feature.title}</h3>
+                </div>
                 <p>{feature.desc}</p>
               </article>
             ))}
@@ -382,14 +407,14 @@ export default function Home() {
           <h3>Pricing Snapshot</h3>
           <div className="visual-legend">
             <article className="legend-card">
-              <span className="icon-dot storage-dot" aria-hidden="true" />
+              <img src="/icons/storage.svg" alt="" width="18" height="18" aria-hidden="true" />
               <div>
                 <strong>Storage</strong>
                 <p className="limit">Plan capacity for uploaded content</p>
               </div>
             </article>
             <article className="legend-card">
-              <span className="icon-dot bandwidth-dot" aria-hidden="true" />
+              <img src="/icons/bandwidth.svg" alt="" width="18" height="18" aria-hidden="true" />
               <div>
                 <strong>Bandwidth</strong>
                 <p className="limit">Monthly delivery/streaming data usage</p>

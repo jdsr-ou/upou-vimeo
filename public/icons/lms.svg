@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="LMS">
+  <rect x="2" y="3" width="20" height="14" rx="2" fill="#1363df"/>
+  <path d="M6 20h12" stroke="#1363df" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="8" cy="9" r="1.2" fill="#fff"/>
+  <circle cx="12" cy="9" r="1.2" fill="#fff"/>
+  <circle cx="16" cy="9" r="1.2" fill="#fff"/>
+</svg>
