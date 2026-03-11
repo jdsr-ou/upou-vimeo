@@ -222,13 +222,6 @@ const enterpriseEstimates = [
   { label: "High estimate", annualUsd: 15000, style: "alt" }
 ];
 
-const platformLogos = [
-  { name: "Vimeo", icon: "/icons/vimeo.svg" },
-  { name: "Canvas", icon: "/icons/canvas.svg" },
-  { name: "Moodle", icon: "/icons/moodle.svg" },
-  { name: "Creative Commons", icon: "/icons/cc.svg" }
-];
-
 const featureData = {
   lms: {
     icon: "/icons/lms.svg",
@@ -340,16 +333,6 @@ function BarChart({ data, maxValue, valueFormatter }) {
 }
 
 export default function Home() {
-  const enterpriseChartData = enterpriseEstimates.map((item) => ({
-    label: item.label,
-    value: item.annualUsd,
-    style: item.style
-  }));
-  const storageChartData = selfServePlans.map((plan) => ({
-    label: plan.label,
-    value: plan.storageTb,
-    style: "good"
-  }));
   const featureItems = Object.values(featureData);
 
   return (
@@ -380,15 +363,6 @@ export default function Home() {
             Vimeo has strong instructional features, but institutional viability depends on choosing the right
             commercial model.
           </p>
-
-          <div className="logo-strip" aria-label="Platform logos">
-            {platformLogos.map((logo) => (
-              <article className="logo-card" key={logo.name}>
-                <img src={logo.icon} alt={`${logo.name} logo`} width="28" height="28" />
-                <span>{logo.name}</span>
-              </article>
-            ))}
-          </div>
 
           <h3>Core Features</h3>
 
@@ -449,19 +423,6 @@ export default function Home() {
           </div>
 
           <div className="chart-card">
-            <h3>Storage by Plan (Self-Serve)</h3>
-            <BarChart
-              data={storageChartData}
-              maxValue={7}
-              valueFormatter={(item) => `${item.value}TB storage`}
-            />
-            <p className="fx-note">
-              Storage and bandwidth are different limits. Self-serve plans can have higher storage but still
-              share a separate 2TB monthly bandwidth cap.
-            </p>
-          </div>
-
-          <div className="chart-card">
             <h3>Plan Feature Inclusion</h3>
             <p className="fx-note">
               Source: detailed plan inclusions below, including inheritance from “Everything in Starter/Standard/Advanced”.
@@ -471,20 +432,13 @@ export default function Home() {
                 <thead>
                   <tr>
                     <th>Feature from plan details</th>
-                    <th>Starter</th>
-                    <th>Standard</th>
-                    <th>Advanced</th>
-                    <th>Enterprise</th>
+                    <th>Starter ($12)</th>
+                    <th>Standard ($25)</th>
+                    <th>Advanced ($75)</th>
+                    <th>Enterprise (Custom)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Plan price</td>
-                    <td>$12/month</td>
-                    <td>$25/month</td>
-                    <td>$75/month</td>
-                    <td>Talk to Vimeo&apos;s team for pricing</td>
-                  </tr>
                   {planFeatureAlignment.map((row) => (
                     <tr key={row.feature}>
                       <td>{row.feature}</td>
@@ -546,14 +500,6 @@ export default function Home() {
             })}
           </div>
 
-          <div className="chart-card">
-            <h3>Enterprise Annual Estimate (USD)</h3>
-            <BarChart
-              data={enterpriseChartData}
-              maxValue={15000}
-              valueFormatter={(item) => `${formatUSD(item.value)} / year`}
-            />
-          </div>
         </section>
 
         <section className="panel" id="bandwidth-constraint">
