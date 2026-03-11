@@ -571,7 +571,6 @@ export default function Home() {
 
         <section className="panel panel-compact" id="fallback-options">
           <h2>Alternatives if Vimeo Is Unacceptable</h2>
-          <p>Keep this as a contingency path only, after Vimeo evaluation and negotiation.</p>
           <div className="alt-grid">
             <article>
               <h3>Panopto</h3>
