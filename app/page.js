@@ -57,7 +57,7 @@ const selfServePlans = [
 
 const enterprisePlan = {
   label: "Enterprise",
-  note: "Talk to our team for pricing",
+  note: "Talk to Vimeo's team for pricing",
   users: "More users",
   storage: "More storage and bandwidth",
   bandwidth: "Custom bandwidth allocation",
@@ -453,6 +453,13 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
+                  <tr>
+                    <td>Plan price</td>
+                    <td>$12/month</td>
+                    <td>$25/month</td>
+                    <td>$75/month</td>
+                    <td>Talk to Vimeo&apos;s team for pricing</td>
+                  </tr>
                   {planFeatureAlignment.map((row) => (
                     <tr key={row.feature}>
                       <td>{row.feature}</td>
@@ -465,15 +472,6 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
-          </div>
-
-          <div className="chart-card">
-            <h3>Self-Serve Price Snapshot (USD)</h3>
-            <BarChart
-              data={selfServePlans}
-              maxValue={75}
-              valueFormatter={(item) => item.note}
-            />
           </div>
 
           <div className="chart-card">
@@ -603,7 +601,6 @@ export default function Home() {
               <ul>
                 <li>2 TB cap makes public self-serve tiers operationally unsafe at scale.</li>
                 <li>Seat-based licensing can become expensive as user counts expand.</li>
-                <li>Post-acquisition pricing pressure is a material renewal risk.</li>
               </ul>
             </article>
           </div>
