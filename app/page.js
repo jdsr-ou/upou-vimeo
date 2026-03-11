@@ -23,7 +23,6 @@ const selfServePlans = [
     value: 25,
     note: "$25/month",
     style: "default",
-    recommended: true,
     storageTb: 4,
     users: "5 users",
     storage: "4TB storage",
@@ -397,7 +396,6 @@ export default function Home() {
           <div className="plan-grid">
             {selfServePlans.map((plan) => (
               <article className="plan-card" key={plan.label}>
-                {plan.recommended ? <p className="eyebrow">Recommended</p> : null}
                 <h3>{plan.label}</h3>
                 <p className="price">{plan.note.replace("/month", "")}/month</p>
                 <p className="limit">{plan.billing}</p>
