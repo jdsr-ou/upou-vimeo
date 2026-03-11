@@ -70,48 +70,90 @@ const enterprisePlan = {
   ]
 };
 
-const coreFeatureAlignment = [
+const planFeatureAlignment = [
   {
-    feature: "LMS Interoperability (LTI 1.3)",
-    starter: "Limited",
-    standard: "Supported",
-    advanced: "Supported",
-    enterprise: "Best fit"
+    feature: "Customizable video player",
+    starter: "Included",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
   },
   {
-    feature: "Custom Institutional Branding",
-    starter: "Limited",
-    standard: "Supported",
-    advanced: "Supported",
-    enterprise: "Best fit"
+    feature: "Password privacy and unlisted links",
+    starter: "Included",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
   },
   {
-    feature: "Global Auto-Translation",
-    starter: "Limited",
-    standard: "Limited",
-    advanced: "Supported",
-    enterprise: "Best fit"
+    feature: "Review and collaboration tools",
+    starter: "Included",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
   },
   {
-    feature: "Domain-Level Security",
-    starter: "Supported",
-    standard: "Supported",
-    advanced: "Supported",
-    enterprise: "Best fit"
+    feature: "Engagement analytics",
+    starter: "Included",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
   },
   {
-    feature: "Native OER Support (Creative Commons)",
-    starter: "Supported",
-    standard: "Supported",
-    advanced: "Supported",
-    enterprise: "Supported"
+    feature: "Branding in the player",
+    starter: "Not listed",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
   },
   {
-    feature: "Accessibility Compliance",
-    starter: "Supported",
-    standard: "Supported",
-    advanced: "Supported",
-    enterprise: "Supported"
+    feature: "Custom watermark",
+    starter: "Not listed",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
+  },
+  {
+    feature: "Lead capture",
+    starter: "Not listed",
+    standard: "Included",
+    advanced: "Included",
+    enterprise: "Included"
+  },
+  {
+    feature: "Hosted livestreamed events",
+    starter: "Not listed",
+    standard: "Not listed",
+    advanced: "Included",
+    enterprise: "Included"
+  },
+  {
+    feature: "Events Q&A, polls, and chat",
+    starter: "Not listed",
+    standard: "Not listed",
+    advanced: "Included",
+    enterprise: "Included"
+  },
+  {
+    feature: "Marketing automation integrations",
+    starter: "Not listed",
+    standard: "Not listed",
+    advanced: "Included",
+    enterprise: "Included"
+  },
+  {
+    feature: "SSO (SAML) and SCIM",
+    starter: "Not listed",
+    standard: "Not listed",
+    advanced: "Not listed",
+    enterprise: "Included"
+  },
+  {
+    feature: "Dedicated support",
+    starter: "Not listed",
+    standard: "Not listed",
+    advanced: "Not listed",
+    enterprise: "Included"
   }
 ];
 
@@ -261,6 +303,10 @@ function chartRowClass(style) {
   return classes.join(" ");
 }
 
+function inclusionClass(value) {
+  return value === "Included" ? "status-pill included" : "status-pill not-listed";
+}
+
 function BarChart({ data, maxValue, valueFormatter }) {
   return (
     <div className="bar-chart">
@@ -391,12 +437,15 @@ export default function Home() {
           </div>
 
           <div className="chart-card">
-            <h3>Core Feature Alignment by Plan</h3>
+            <h3>Plan Feature Inclusion</h3>
+            <p className="fx-note">
+              Source: detailed plan inclusions below, including inheritance from “Everything in Starter/Standard/Advanced”.
+            </p>
             <div className="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>Core feature</th>
+                    <th>Feature from plan details</th>
                     <th>Starter</th>
                     <th>Standard</th>
                     <th>Advanced</th>
@@ -404,13 +453,13 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {coreFeatureAlignment.map((row) => (
+                  {planFeatureAlignment.map((row) => (
                     <tr key={row.feature}>
                       <td>{row.feature}</td>
-                      <td>{row.starter}</td>
-                      <td>{row.standard}</td>
-                      <td>{row.advanced}</td>
-                      <td>{row.enterprise}</td>
+                      <td><span className={inclusionClass(row.starter)}>{row.starter}</span></td>
+                      <td><span className={inclusionClass(row.standard)}>{row.standard}</span></td>
+                      <td><span className={inclusionClass(row.advanced)}>{row.advanced}</span></td>
+                      <td><span className={inclusionClass(row.enterprise)}>{row.enterprise}</span></td>
                     </tr>
                   ))}
                 </tbody>
