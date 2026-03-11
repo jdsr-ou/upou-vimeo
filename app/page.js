@@ -357,10 +357,6 @@ export default function Home() {
       <main className="container main-content">
         <section className="panel panel-priority" id="vimeo-fit-pricing">
           <h2>Vimeo Features and Pricing Alignment</h2>
-          <p>
-            Vimeo has strong instructional features, but institutional viability depends on choosing the right
-            commercial model.
-          </p>
 
           <h3>Core Features</h3>
 
@@ -475,7 +471,7 @@ export default function Home() {
             at <strong>PHP 59 per USD</strong>.
           </p>
           <p className="fx-note">
-            These are planning assumptions, not official Vimeo Enterprise quotes.
+            These are planning assumptions based on researched user reviews, blogs, and posts, not official Vimeo Enterprise quotes.
           </p>
 
           <div className="estimate-grid">
@@ -502,8 +498,7 @@ export default function Home() {
         <section className="panel" id="bandwidth-constraint">
           <h2>Bandwidth Constraint for OER Use Case</h2>
           <p>
-            Vimeo self-serve plans are constrained by a <strong>2 TB monthly bandwidth cap</strong>. For
-            UPOU OER delivery, this creates a high likelihood of service disruption.
+            Vimeo self-serve plans are constrained by a <strong>2 TB monthly bandwidth cap</strong>. For OER delivery, this creates a high likelihood of service disruption.
           </p>
           <div className="warning">
             <strong>Operational concern:</strong> If usage exceeds the cap, Vimeo may trigger account review
@@ -593,8 +588,8 @@ export default function Home() {
           <h2>Recommendation</h2>
           <p>
             This evaluation indicates that Vimeo self-serve plans have material bandwidth and seat-scaling
-            constraints for public OER workloads. UPOU may consider Enterprise, self-serve with hybrid
-            architecture, or alternative platforms based on budget, risk tolerance, and operational design.
+            constraints for our workload requirements. The viable options are: Enterprise, self-serve with hybrid
+            architecture, or alternative platforms based on budget and operational design.
           </p>
         </section>
       </main>
