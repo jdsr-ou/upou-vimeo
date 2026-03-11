@@ -6,8 +6,10 @@ const selfServePlans = [
     value: 12,
     note: "$12/month",
     style: "default",
+    storageTb: 2,
     users: "1 user",
     storage: "2TB storage",
+    bandwidth: "2TB bandwidth/month (self-serve cap)",
     billing: "Billed annually",
     keyFeatures: [
       "Player customization",
@@ -22,8 +24,10 @@ const selfServePlans = [
     note: "$25/month",
     style: "default",
     recommended: true,
+    storageTb: 4,
     users: "5 users",
     storage: "4TB storage",
+    bandwidth: "2TB bandwidth/month (self-serve cap)",
     billing: "Billed annually",
     keyFeatures: [
       "Starter features",
@@ -37,8 +41,10 @@ const selfServePlans = [
     value: 75,
     note: "$75/month",
     style: "default",
+    storageTb: 7,
     users: "10 users",
     storage: "7TB storage",
+    bandwidth: "2TB bandwidth/month (self-serve cap)",
     billing: "Billed annually",
     keyFeatures: [
       "Standard features",
@@ -54,6 +60,7 @@ const enterprisePlan = {
   note: "Talk to our team for pricing",
   users: "More users",
   storage: "More storage and bandwidth",
+  bandwidth: "Custom bandwidth allocation",
   keyFeatures: [
     "Advanced features",
     "SSO and SCIM",
@@ -62,6 +69,51 @@ const enterprisePlan = {
     "Dedicated support"
   ]
 };
+
+const coreFeatureAlignment = [
+  {
+    feature: "LMS Interoperability (LTI 1.3)",
+    starter: "Limited",
+    standard: "Supported",
+    advanced: "Supported",
+    enterprise: "Best fit"
+  },
+  {
+    feature: "Custom Institutional Branding",
+    starter: "Limited",
+    standard: "Supported",
+    advanced: "Supported",
+    enterprise: "Best fit"
+  },
+  {
+    feature: "Global Auto-Translation",
+    starter: "Limited",
+    standard: "Limited",
+    advanced: "Supported",
+    enterprise: "Best fit"
+  },
+  {
+    feature: "Domain-Level Security",
+    starter: "Supported",
+    standard: "Supported",
+    advanced: "Supported",
+    enterprise: "Best fit"
+  },
+  {
+    feature: "Native OER Support (Creative Commons)",
+    starter: "Supported",
+    standard: "Supported",
+    advanced: "Supported",
+    enterprise: "Supported"
+  },
+  {
+    feature: "Accessibility Compliance",
+    starter: "Supported",
+    standard: "Supported",
+    advanced: "Supported",
+    enterprise: "Supported"
+  }
+];
 
 const detailedPlans = [
   {
@@ -155,38 +207,30 @@ const featureData = {
   }
 };
 
-const featureScorecard = [
-  { label: "LMS interoperability", value: 5.0, note: "5.0 / 5", style: "good" },
-  { label: "Custom branding", value: 4.6, note: "4.6 / 5", style: "good" },
-  { label: "Auto-translation", value: 4.5, note: "4.5 / 5", style: "good" },
-  { label: "Domain-level security", value: 5.0, note: "5.0 / 5", style: "good" },
-  { label: "OER discoverability", value: 4.8, note: "4.8 / 5", style: "good" },
-  { label: "Accessibility support", value: 4.7, note: "4.7 / 5", style: "good" },
-  { label: "Self-serve cost predictability", value: 1.0, note: "1.0 / 5", style: "alt" },
-  { label: "Enterprise cost predictability", value: 3.0, note: "3.0 / 5", style: "default" }
-];
-
 const bandwidthScenarios = [
   {
     scenario: "One popular 1080p lecture",
-    streamSize: "1.5 GB/view",
+    duration: "45 minutes",
+    streamSize: "0.6 GB/view",
     dailyViews: "300",
-    monthly: "13.5 TB/month",
-    cap: "~4.6 days"
+    monthly: "5.4 TB/month",
+    cap: "~11.1 days"
   },
   {
     scenario: "Three core 720p OER lectures",
-    streamSize: "0.8 GB/view",
+    duration: "30 minutes",
+    streamSize: "0.35 GB/view",
     dailyViews: "250 each (750 total)",
-    monthly: "18.0 TB/month",
-    cap: "~3.4 days"
+    monthly: "7.9 TB/month",
+    cap: "~7.6 days"
   },
   {
     scenario: "Public event lecture week",
-    streamSize: "2.0 GB/view",
+    duration: "90 minutes",
+    streamSize: "1.0 GB/view",
     dailyViews: "1,000",
-    monthly: "60.0 TB/month",
-    cap: "~1.0 day"
+    monthly: "30.0 TB/month",
+    cap: "~2.0 days"
   }
 ];
 
@@ -242,6 +286,11 @@ export default function Home() {
     value: item.annualUsd,
     style: item.style
   }));
+  const storageChartData = selfServePlans.map((plan) => ({
+    label: plan.label,
+    value: plan.storageTb,
+    style: "good"
+  }));
   const featureItems = Object.values(featureData);
 
   return (
@@ -249,10 +298,14 @@ export default function Home() {
       <header className="hero">
         <div className="container">
           <p className="eyebrow">Strategic Evaluation Report</p>
-          <h1>Vimeo for UPOU OER Video Infrastructure</h1>
+          <h1>Vimeo for UPOU&apos;s Video Storage Infrastructure</h1>
           <p className="subtitle">
             Strategic assessment for UP Open University focused on pricing, institutional fit, and
             procurement risk.
+          </p>
+          <p className="subtitle">
+            Assumption: Vimeo will be used for OER distribution and delivery, with course-level usage
+            integrated into UPOU&apos;s LMS environment.
           </p>
           <div className="meta-row">
             <span>Institution: UP Open University</span>
@@ -280,16 +333,23 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="chart-card">
-            <h3>Feature and Risk Scorecard (1 low - 5 high)</h3>
-            <BarChart
-              data={featureScorecard}
-              maxValue={5}
-              valueFormatter={(item) => item.note}
-            />
-          </div>
-
           <h3>Pricing Snapshot</h3>
+          <div className="visual-legend">
+            <article className="legend-card">
+              <span className="icon-dot storage-dot" aria-hidden="true" />
+              <div>
+                <strong>Storage</strong>
+                <p className="limit">Plan capacity for uploaded content</p>
+              </div>
+            </article>
+            <article className="legend-card">
+              <span className="icon-dot bandwidth-dot" aria-hidden="true" />
+              <div>
+                <strong>Bandwidth</strong>
+                <p className="limit">Monthly delivery/streaming data usage</p>
+              </div>
+            </article>
+          </div>
           <div className="plan-grid">
             {selfServePlans.map((plan) => (
               <article className="plan-card" key={plan.label}>
@@ -298,25 +358,64 @@ export default function Home() {
                 <p className="price">{plan.note.replace("/month", "")}/month</p>
                 <p className="limit">{plan.billing}</p>
                 <p className="limit">{plan.users}</p>
-                <p className="limit">{plan.storage}</p>
-                <div className="feature-tags">
-                  {plan.keyFeatures.map((feature) => (
-                    <span className="tag" key={`${plan.label}-${feature}`}>{feature}</span>
-                  ))}
+                <div className="capacity-badge">
+                  <span className="capacity-label">Storage</span>
+                  <strong>{plan.storage}</strong>
                 </div>
+                <p className="limit bandwidth-note">{plan.bandwidth}</p>
               </article>
             ))}
             <article className="plan-card" key={enterprisePlan.label}>
               <h3>{enterprisePlan.label}</h3>
               <p className="price" style={{ fontSize: "1.1rem" }}>{enterprisePlan.note}</p>
               <p className="limit">{enterprisePlan.users}</p>
-              <p className="limit">{enterprisePlan.storage}</p>
-              <div className="feature-tags">
-                {enterprisePlan.keyFeatures.map((feature) => (
-                  <span className="tag" key={`${enterprisePlan.label}-${feature}`}>{feature}</span>
-                ))}
+              <div className="capacity-badge">
+                <span className="capacity-label">Storage</span>
+                <strong>{enterprisePlan.storage}</strong>
               </div>
+              <p className="limit bandwidth-note">{enterprisePlan.bandwidth}</p>
             </article>
+          </div>
+
+          <div className="chart-card">
+            <h3>Storage by Plan (Self-Serve)</h3>
+            <BarChart
+              data={storageChartData}
+              maxValue={7}
+              valueFormatter={(item) => `${item.value}TB storage`}
+            />
+            <p className="fx-note">
+              Storage and bandwidth are different limits. Self-serve plans can have higher storage but still
+              share a separate 2TB monthly bandwidth cap.
+            </p>
+          </div>
+
+          <div className="chart-card">
+            <h3>Core Feature Alignment by Plan</h3>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Core feature</th>
+                    <th>Starter</th>
+                    <th>Standard</th>
+                    <th>Advanced</th>
+                    <th>Enterprise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {coreFeatureAlignment.map((row) => (
+                    <tr key={row.feature}>
+                      <td>{row.feature}</td>
+                      <td>{row.starter}</td>
+                      <td>{row.standard}</td>
+                      <td>{row.advanced}</td>
+                      <td>{row.enterprise}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="chart-card">
@@ -406,6 +505,7 @@ export default function Home() {
               <thead>
                 <tr>
                   <th>Scenario</th>
+                  <th>Typical stream time</th>
                   <th>Estimated stream size</th>
                   <th>Estimated daily views</th>
                   <th>Projected monthly bandwidth</th>
@@ -416,6 +516,7 @@ export default function Home() {
                 {bandwidthScenarios.map((scenario) => (
                   <tr key={scenario.scenario}>
                     <td>{scenario.scenario}</td>
+                    <td>{scenario.duration}</td>
                     <td>{scenario.streamSize}</td>
                     <td>{scenario.dailyViews}</td>
                     <td>{scenario.monthly}</td>
@@ -425,17 +526,20 @@ export default function Home() {
               </tbody>
             </table>
           </div>
+
+          <h3>Seat Licensing Consideration</h3>
+          <p>
+            Beyond bandwidth, seat limits can also affect scale. As faculty and staff usage grows, additional
+            user seats may increase recurring costs and should be evaluated together with bandwidth exposure.
+          </p>
+          <div className="warning">
+            <strong>Cost visibility concern:</strong> Seat growth and bandwidth growth can compound total cost,
+            especially when public OER traffic and internal authoring demand rise at the same time.
+          </div>
         </section>
 
-        <section className="panel" id="procurement-guardrails">
-          <h2>Procurement Guardrails</h2>
-          <ul>
-            <li>Negotiate Enterprise directly; do not onboard through self-serve tiers.</li>
-            <li>Demand multi-year price locks and protect against renewal shocks.</li>
-            <li>Target education/non-profit discounts in the 20% to 25% range.</li>
-          </ul>
-
-          <h3>Pros and Cons</h3>
+        <section className="panel" id="pros-cons">
+          <h2>Pros and Cons</h2>
           <div className="pros-cons">
             <article>
               <h4>Pros</h4>
@@ -453,23 +557,6 @@ export default function Home() {
                 <li>Post-acquisition pricing pressure is a material renewal risk.</li>
               </ul>
             </article>
-          </div>
-        </section>
-
-        <section className="panel" id="strategic-risk">
-          <h2>Strategic Risk</h2>
-          <p>
-            Following Vimeo&apos;s late-2025 acquisition by Bending Spoons, UPOU should treat renewal price
-            inflation as a high-probability risk.
-          </p>
-          <div className="risk-box">
-            <h3>Required Safeguards</h3>
-            <ol>
-              <li>Enterprise only: avoid self-serve onboarding paths.</li>
-              <li>Multi-year price lock with explicit renewal cap mechanics.</li>
-              <li>Local master-file archive for all lectures to preserve migration readiness.</li>
-              <li>Documented export and migration protocol before contract signing.</li>
-            </ol>
           </div>
         </section>
 
@@ -491,8 +578,9 @@ export default function Home() {
         <section className="panel panel-conclusion" id="recommendation">
           <h2>Recommendation</h2>
           <p>
-            Vimeo can fit UPOU only through a defensible Enterprise contract. Self-serve tiers are not
-            suitable for public OER scale because of the 2 TB cap and service risk.
+            This evaluation indicates that Vimeo self-serve plans have material bandwidth and seat-scaling
+            constraints for public OER workloads. UPOU may consider Enterprise, self-serve with hybrid
+            architecture, or alternative platforms based on budget, risk tolerance, and operational design.
           </p>
         </section>
       </main>
