@@ -347,7 +347,7 @@ export default function Home() {
           </p>
           <p className="subtitle">
             Assumption: Vimeo will be used for OER distribution and delivery, with course-level usage
-            integrated into UPOU&apos;s LMS environment.
+            integrated into UPOU&apos;s LMS environments.
           </p>
           <div className="meta-row">
             <span>Date: March 11, 2026</span>
@@ -502,10 +502,10 @@ export default function Home() {
         </section>
 
         <section className="panel" id="bandwidth-constraint">
-          <h2>Bandwidth Constraint for Public OER</h2>
+          <h2>Bandwidth Constraint for OER Use Case</h2>
           <p>
             Vimeo self-serve plans are constrained by a <strong>2 TB monthly bandwidth cap</strong>. For
-            UPOU public OER delivery, this creates a high likelihood of service disruption.
+            UPOU OER delivery, this creates a high likelihood of service disruption.
           </p>
           <div className="warning">
             <strong>Operational concern:</strong> If usage exceeds the cap, Vimeo may trigger account review
