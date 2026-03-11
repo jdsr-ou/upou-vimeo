@@ -143,6 +143,28 @@ li {
   background: #fffdf9;
 }
 
+.enterprise-card {
+  border-color: #d8c8e8;
+  background: linear-gradient(180deg, #fffdf9 0%, #fbf7ff 100%);
+  box-shadow: 0 10px 24px rgba(71, 38, 107, 0.12);
+  position: relative;
+}
+
+.enterprise-card::before {
+  content: "Enterprise";
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #47266b;
+  background: #efe5ff;
+  border: 1px solid #d8c8e8;
+  border-radius: 999px;
+  padding: 0.14rem 0.46rem;
+}
+
 .plan-card h3 {
   margin-top: 0;
 }

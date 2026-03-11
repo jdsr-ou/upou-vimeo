@@ -339,7 +339,7 @@ export default function Home() {
     <>
       <header className="hero">
         <div className="container">
-          <p className="eyebrow">Strategic Evaluation Report</p>
+          <p className="eyebrow">Evaluation Report</p>
           <h1>Vimeo for UPOU&apos;s Video Storage Infrastructure</h1>
           <p className="subtitle">
             Strategic assessment for UP Open University focused on pricing, institutional fit, and
@@ -350,7 +350,6 @@ export default function Home() {
             integrated into UPOU&apos;s LMS environment.
           </p>
           <div className="meta-row">
-            <span>Institution: UP Open University</span>
             <span>Date: March 11, 2026</span>
           </div>
         </div>
@@ -410,7 +409,7 @@ export default function Home() {
                 <p className="limit bandwidth-note">{plan.bandwidth}</p>
               </article>
             ))}
-            <article className="plan-card" key={enterprisePlan.label}>
+            <article className="plan-card enterprise-card" key={enterprisePlan.label}>
               <h3>{enterprisePlan.label}</h3>
               <p className="price" style={{ fontSize: "1.1rem" }}>{enterprisePlan.note}</p>
               <p className="limit">{enterprisePlan.users}</p>
