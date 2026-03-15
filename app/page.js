@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 const EASE = [0.16, 1, 0.3, 1];
@@ -63,6 +63,12 @@ const enterpriseEstimates = [
   { label: "High estimate", annualUsd: 15000 }
 ];
 
+const panoptoEstimates = [
+  { label: "Typical range (low)", annualUsd: 7126 },
+  { label: "Median estimate", annualUsd: 10000, recommended: true },
+  { label: "Typical range (high)", annualUsd: 10891 }
+];
+
 const bandwidthScenarios = [
   {
     scenario: "Single popular 1080p lecture",
@@ -98,7 +104,7 @@ const providerSlides = [
       "Vimeo is the most presentation-ready option in the briefing. It is also the simplest platform overall to deploy and manage, but public OER success can trigger contract pressure because the self-serve model is tightly bandwidth-capped.",
     heroSignals: [
       { label: "Deployment model", value: "Fastest rollout", tone: "success" },
-      { label: "Self-serve catch", value: "Strict bandwidth exposure", tone: "negative" },
+      { label: "Self-serve catch", value: "Strict bandwidth exposure", tone: "warning" },
       { label: "Best use", value: "Public-facing delivery" }
     ],
     capabilityBlocks: [
@@ -116,7 +122,7 @@ const providerSlides = [
         summary:
           "Self-serve plans are limited to 2 TB monthly bandwidth. Viral OER usage can force immediate movement into a custom contract.",
         pills: ["2 TB cap", "Forced upgrade pressure"],
-        tone: "negative"
+        tone: "warning"
       },
       {
         category: "UX",
@@ -147,13 +153,16 @@ const providerSlides = [
         title: "Bandwidth reality",
         summary:
           "Even moderate public usage can exceed Vimeo’s self-serve cap quickly.",
-        tone: "negative"
+        tone: "warning",
+        noteTag: "2 TB cap",
+        note:
+          "Self-serve plans are capped at 2 TB per month and can trigger forced enterprise contracting after repeated overages."
       },
       {
         title: "Budget impact",
         summary:
           "Seat growth and bandwidth growth can compound total cost, especially if public delivery and internal authoring expand at the same time.",
-        tone: "negative"
+        tone: "warning"
       },
       {
         title: "Best fit",
@@ -252,13 +261,19 @@ const providerSlides = [
         title: "Elai expansion",
         summary:
           "The Elai acquisition extends Panopto from lecture management into AI-assisted text-to-video production.",
-        tone: "success"
+        tone: "success",
+        noteTag: "Elai",
+        note:
+          "Elai supports text-to-video, voice cloning, and multilingual output; in Moodle contexts this helps teachers produce learning materials faster and gives students more accessible content formats."
       },
       {
         title: "Best fit",
         summary:
           "Panopto is not the absolute easiest platform to stand up, but it is the simplest serious academic fit once Moodle depth is non-negotiable.",
-        tone: "signal"
+        tone: "signal",
+        noteTag: "Moodle",
+        note:
+          "Panopto Block, deep linking, and gradebook-linked workflows support both teacher publishing and student assignment/video review flows."
       }
     ],
     blueprintTitle: "Panopto LTI 1.3 setup",
@@ -282,7 +297,7 @@ const providerSlides = [
     heroSignals: [
       { label: "Customization", value: "Most modular and API-driven option" },
       { label: "Deployment model", value: "SaaS, private cloud, on-premise, or hybrid" },
-      { label: "Tradeoff", value: "Weakest on cost predictability and admin overhead", tone: "negative" }
+      { label: "Tradeoff", value: "Weakest on cost predictability and admin overhead", tone: "warning" }
     ],
     capabilityBlocks: [
       {
@@ -299,7 +314,7 @@ const providerSlides = [
         summary:
           "Kaltura scales across multiple deployment models, but bandwidth, storage, streams, and live delivery all carry explicit cost signals.",
         pills: ["VPaaS", "$0.17/GB bandwidth", "$0.25/GB storage"],
-        tone: "negative"
+        tone: "warning"
       },
       {
         category: "UX",
@@ -315,7 +330,7 @@ const providerSlides = [
         summary:
           "Kaltura assumes a technical owner. Without one, complexity spreads into billing, integrations, plugins, and maintenance overhead.",
         pills: ["Highest admin load", "API-first"],
-        tone: "negative"
+        tone: "warning"
       }
     ],
     pricing: {
@@ -327,7 +342,11 @@ const providerSlides = [
         ["Outbound Bandwidth", "$0.17 / GB", "Primary delivery meter"],
         ["Managed Storage", "$0.25 / GB / month", "Monthly library growth cost"],
         ["Transcoding Output", "$2.25 / Output GB", "Each rendition adds billable usage"],
-        ["Active Unique IDs", "$0.55 / ID / month", "Active-user count is metered"],
+        [
+          "Active Unique IDs",
+          "$0.55 / ID / month",
+          "Unique active user accounts per month (students, faculty, and admins) are metered"
+        ],
         ["Delivered Video Streams", "$0.001 / stream", "Every playback start adds cost"],
         ["Live Viewing", "$1.00 / viewer / hour", "Large live events scale quickly"]
       ]
@@ -343,7 +362,10 @@ const providerSlides = [
         title: "AI direction",
         summary:
           "Agentic avatars, conversational SDKs, and screen-aware assistance point toward a more interactive model than standard video hosting.",
-        tone: "success"
+        tone: "success",
+        noteTag: "Agentic AI",
+        note:
+          "Kaltura’s agentic stack includes conversational avatars and SDK-driven embedding, enabling custom support/training workflows that can be integrated into Moodle-connected experiences."
       },
       {
         title: "Best fit",
@@ -388,7 +410,7 @@ const comparisonRows = [
   {
     label: "Pricing model",
     values: {
-      vimeo: { pill: "Bandwidth cap", text: "Low entry pricing but strict bandwidth exposure.", tone: "negative" },
+      vimeo: { pill: "Bandwidth cap", text: "Low entry pricing but strict bandwidth exposure.", tone: "warning" },
       panopto: { pill: "Predictable", text: "Hours-based licensing aligns with institutional budgeting.", tone: "success" },
       kaltura: { pill: "Variable", text: "Usage-based billing rewards control but raises volatility.", tone: "warning" }
     }
@@ -410,7 +432,7 @@ const comparisonRows = [
     values: {
       vimeo: { pill: "Lightest", text: "Simplest platform overall to deploy and manage.", tone: "success" },
       panopto: { pill: "Moderate", text: "More setup than Vimeo, but easier to govern than Kaltura." },
-      kaltura: { pill: "Heaviest", text: "Needs dedicated technical ownership and closer oversight.", tone: "negative" }
+      kaltura: { pill: "Heaviest", text: "Needs dedicated technical ownership and closer oversight.", tone: "warning" }
     }
   }
 ];
@@ -435,9 +457,221 @@ const comparisonTakeaways = [
     title: "Best for customization",
     summary:
       "Best when UPOU needs modular APIs and deployment choice, but it is the weakest option for pricing predictability and admin simplicity.",
-    tone: "negative"
+    tone: "warning"
   }
 ];
+
+const comparisonDetailCards = [
+  {
+    id: "panopto",
+    ecosystem: "Panopto ecosystem",
+    title: "Education-centric workflow depth",
+    points: [
+      "Smart Search indexes spoken words, slides, and on-screen text for faster student review.",
+      "Moodle workflows support folder provisioning, deep linking, and assignment/gradebook-aligned usage.",
+      "Elai extends production with text-to-video and multilingual support for teachers and course teams."
+    ]
+  },
+  {
+    id: "vimeo",
+    ecosystem: "Vimeo ecosystem",
+    title: "Fast rollout and strong external presentation",
+    points: [
+      "The cleanest launch path with low operational overhead and polished public playback.",
+      "High-quality player branding and external communication controls are strong for outreach content.",
+      "Commercial planning needs close tracking when public views grow due to self-serve bandwidth limits."
+    ]
+  },
+  {
+    id: "kaltura",
+    ecosystem: "Kaltura ecosystem",
+    title: "Maximum customization and deployment choice",
+    points: [
+      "Supports SaaS, private cloud, on-premise, and hybrid deployment decisions.",
+      "API-first architecture enables custom media patterns in complex institutional environments.",
+      "Usage-based billing and implementation complexity demand stronger technical and finance oversight."
+    ]
+  }
+];
+
+const ecosystemFeatureCatalog = {
+  vimeo: [
+    {
+      id: "vimeo-player-branding",
+      category: "Delivery",
+      title: "4K player and brand controls",
+      summary: "Ad-free 4K delivery, white-label player settings, CTAs, and social distribution for external OER reach.",
+      moodleImpact: "Strong for polished embedded playback and controlled distribution into Moodle-linked pages.",
+      studentImpact: "Clean playback experience with fewer distractions.",
+      teacherImpact: "Faster publishing for outreach or course intro materials.",
+      adminImpact: "Simple publishing governance with fewer moving parts."
+    },
+    {
+      id: "vimeo-fast-rollout",
+      category: "Operations",
+      title: "Fastest rollout path",
+      summary: "SaaS-only model is straightforward to deploy and operate with lower platform management overhead.",
+      moodleImpact: "Quick integration for embedding workflows without heavy infrastructure setup.",
+      studentImpact: "Faster access to uploaded resources.",
+      teacherImpact: "Low-friction publishing and update cycle.",
+      adminImpact: "Lower day-to-day platform operations burden."
+    },
+    {
+      id: "vimeo-privacy-security",
+      category: "Governance",
+      title: "Privacy and enterprise security controls",
+      summary: "Password protection, domain restriction, and enterprise controls including HIPAA-ready tiers.",
+      moodleImpact: "Domain restrictions help keep playback scoped to approved institutional contexts.",
+      studentImpact: "Improved privacy for course-restricted media.",
+      teacherImpact: "More confidence when sharing protected learning materials.",
+      adminImpact: "Governance strength rises significantly in enterprise tiers."
+    },
+    {
+      id: "vimeo-ai-assist",
+      category: "AI",
+      title: "AI-assisted editing and captions",
+      summary: "Supports captioning, editing assistance, and translation-oriented workflows for faster publishing.",
+      moodleImpact: "Useful for accessibility improvements on embedded learning assets.",
+      studentImpact: "Better accessibility through captioned and translated media.",
+      teacherImpact: "Less manual editing effort for course videos.",
+      adminImpact: "Supports accessibility programs with lighter production workflows."
+    },
+    {
+      id: "vimeo-bandwidth-policy",
+      category: "Commercial",
+      title: "Self-serve bandwidth policy",
+      summary: "2 TB monthly cap on self-serve plans can escalate cost and force enterprise movement on high traffic.",
+      moodleImpact: "High-demand OER hosted through Vimeo can trigger operational and budget pressure.",
+      studentImpact: "Potential disruption risk if traffic spikes and limits are reached.",
+      teacherImpact: "Popular public-facing lectures can outgrow self-serve quickly.",
+      adminImpact: "Needs active bandwidth monitoring and contract planning."
+    }
+  ],
+  panopto: [
+    {
+      id: "panopto-smart-search",
+      category: "Learning",
+      title: "AI Smart Search (ASR + OCR + slides)",
+      summary: "Searches spoken words, slide text, and on-screen content to make lecture libraries discoverable.",
+      moodleImpact: "Improves Moodle-linked lecture retrieval and revision workflows.",
+      studentImpact: "Find exact moments quickly for exam review and remediation.",
+      teacherImpact: "Recorded lectures remain usable over time instead of becoming hard-to-search archives.",
+      adminImpact: "Higher content utility from existing media inventory."
+    },
+    {
+      id: "panopto-moodle-lti",
+      category: "Integration",
+      title: "Moodle LTI and course workflows",
+      summary: "Supports Panopto Block, deep linking, assignment integration, and gradebook-aligned usage patterns.",
+      moodleImpact: "Directly aligns with structured course delivery and assignment flows in Moodle.",
+      studentImpact: "Cleaner submission and viewing flows inside course spaces.",
+      teacherImpact: "Streamlined embedding, folder sync, and graded video interactions.",
+      adminImpact: "More predictable LMS-video governance and support patterns."
+    },
+    {
+      id: "panopto-lecture-capture",
+      category: "Capture",
+      title: "Lecture capture and recording depth",
+      summary: "Remote hardware integration and multi-cam recording support synchronized learning delivery.",
+      moodleImpact: "Supports richer lecture capture workflows feeding directly into Moodle courses.",
+      studentImpact: "Higher-quality recorded sessions for asynchronous learning.",
+      teacherImpact: "Better capture options for complex instructional formats.",
+      adminImpact: "Scalable recording operations for teaching-heavy terms."
+    },
+    {
+      id: "panopto-elai",
+      category: "AI",
+      title: "Elai-assisted production",
+      summary: "Text-to-video, voice options, and multilingual generation expand content production capacity.",
+      moodleImpact: "Useful for rapid localized material creation for Moodle-based courses.",
+      studentImpact: "More accessible formats and language coverage.",
+      teacherImpact: "Faster conversion of notes/scripts into publishable learning video.",
+      adminImpact: "Supports wider content output without proportional studio expansion."
+    },
+    {
+      id: "panopto-security",
+      category: "Governance",
+      title: "Security and reliability posture",
+      summary: "AES-256 at rest, TLS 1.3 in transit, RBAC, and a 99.99% uptime reliability profile.",
+      moodleImpact: "Supports stable and policy-aligned institutional delivery.",
+      studentImpact: "More consistent playback availability during peak periods.",
+      teacherImpact: "Reduced disruption risk during teaching cycles.",
+      adminImpact: "Stronger compliance alignment and operational confidence."
+    },
+    {
+      id: "panopto-pricing-model",
+      category: "Commercial",
+      title: "Hours-based licensing model",
+      summary: "Created, stored, archived, and delivered hours model gives more predictable planning than pure usage spikes.",
+      moodleImpact: "Better fit for course-centric, authenticated delivery models.",
+      studentImpact: "Lower risk of sudden access constraints from metered spikes.",
+      teacherImpact: "Supports consistent publishing expectations across terms.",
+      adminImpact: "Improves annual budgeting and renewal predictability."
+    }
+  ],
+  kaltura: [
+    {
+      id: "kaltura-agentic-ai",
+      category: "AI",
+      title: "Agentic AI avatars and conversational SDK",
+      summary: "Real-time conversational avatars and SDK tooling enable advanced interactive experiences.",
+      moodleImpact: "Can power custom interactive learning/support surfaces around Moodle content.",
+      studentImpact: "Potential for guided, conversational learning assistance.",
+      teacherImpact: "New pathways for interactive training and support content.",
+      adminImpact: "Requires stronger technical ownership to deploy safely."
+    },
+    {
+      id: "kaltura-modular-stack",
+      category: "Architecture",
+      title: "KMC + MediaSpace + KAF modular stack",
+      summary: "Backend console, portal layer, and integration framework support highly customized media ecosystems.",
+      moodleImpact: "Flexible enough for complex Moodle integration patterns.",
+      studentImpact: "Can deliver richer, customized portal experiences.",
+      teacherImpact: "Supports varied publishing models and learning activities.",
+      adminImpact: "Greater flexibility paired with higher implementation complexity."
+    },
+    {
+      id: "kaltura-lti-toolkit",
+      category: "Integration",
+      title: "Deep LTI toolkit and identity mapping",
+      summary: "My Media, Media Gallery, quizzes, and LTI 1.3 user-claim mapping for precise LMS identity control.",
+      moodleImpact: "Strong fit when UPOU needs custom Moodle role/identity behavior.",
+      studentImpact: "Supports richer in-course media interactions.",
+      teacherImpact: "More configurable placement and grading-linked media workflows.",
+      adminImpact: "Needs careful setup to avoid role/claim misconfiguration."
+    },
+    {
+      id: "kaltura-governance",
+      category: "Governance",
+      title: "Advanced entitlement and key management",
+      summary: "Access control profiles, geo/IP rules, and HYOK options for deep policy control.",
+      moodleImpact: "Useful when institutional policy requires tighter entitlement boundaries.",
+      studentImpact: "Policy-aware access controls in restricted contexts.",
+      teacherImpact: "Supports specialized compliance requirements.",
+      adminImpact: "Adds governance power with more policy-management overhead."
+    },
+    {
+      id: "kaltura-deployment-modes",
+      category: "Deployment",
+      title: "SaaS, private cloud, on-prem, hybrid",
+      summary: "Multiple deployment modes allow infrastructure decisions to remain institutional.",
+      moodleImpact: "Can align with specific infrastructure and data-governance constraints.",
+      studentImpact: "Delivery experience depends on institutional implementation quality.",
+      teacherImpact: "Can be tailored to institutional teaching models.",
+      adminImpact: "Highest infrastructure planning responsibility among the three."
+    },
+    {
+      id: "kaltura-vpaas-pricing",
+      category: "Commercial",
+      title: "VPaaS metered pricing",
+      summary: "Bandwidth, storage, streams, and active IDs are billed per usage unit.",
+      moodleImpact: "Budget outcomes vary with learning demand and viewing behavior.",
+      studentImpact: "Scale is possible, but budget governance is crucial.",
+      teacherImpact: "Heavy usage scenarios should be forecast in advance.",
+      adminImpact: "Finance and platform teams need continuous usage monitoring."
+    }
+  ]
+};
 
 const navGroups = [
   ...providerSlides.map(({ id, number, title, subtitle }) => ({ id, number, title, subtitle })),
@@ -463,8 +697,7 @@ function StatusPill({ children, tone = "default" }) {
         styles.statusPill,
         tone === "signal" && styles.statusPillSignal,
         tone === "success" && styles.statusPillSuccess,
-        tone === "warning" && styles.statusPillWarning,
-        tone === "negative" && styles.statusPillNegative
+        tone === "warning" && styles.statusPillWarning
       )}
     >
       {children}
@@ -483,10 +716,6 @@ function getToneClass(tone) {
 
   if (tone === "warning") {
     return styles.toneWarning;
-  }
-
-  if (tone === "negative") {
-    return styles.toneNegative;
   }
 
   return "";
@@ -601,9 +830,7 @@ function GroupHeader({ slide, reducedMotion }) {
                     ? "Positive"
                     : signal.tone === "warning"
                       ? "Watch"
-                      : signal.tone === "negative"
-                        ? "Downside"
-                        : "Priority"}
+                      : "Priority"}
                 </StatusPill>
               ) : null}
             </motion.article>
@@ -664,7 +891,9 @@ function DataTable({ title, description, headers, rows }) {
             {rows.map((row) => (
               <tr key={row.join("-")}>
                 {row.map((cell) => (
-                  <td key={`${row[0]}-${cell}`}>{cell}</td>
+                  <td key={`${row[0]}-${cell}`}>
+                    {typeof cell === "string" && cell.includes("$") ? <span className={styles.priceValue}>{cell}</span> : cell}
+                  </td>
                 ))}
               </tr>
             ))}
@@ -687,7 +916,14 @@ function OutlookGrid({ items }) {
           className={joinClasses(styles.outlookCard, getToneClass(item.tone))}
           key={item.title}
         >
-          <h3>{item.title}</h3>
+          <div className={styles.outlookCardTop}>
+            <h3>{item.title}</h3>
+            {item.note ? (
+              <span className={styles.signalNote} tabIndex={0} title={item.note} data-note={item.note}>
+                {item.noteTag || "Info"}
+              </span>
+            ) : null}
+          </div>
           <p>{item.summary}</p>
         </motion.article>
       ))}
@@ -810,7 +1046,103 @@ function VimeoDetailPanels() {
   );
 }
 
-function ProviderPanel({ slide, reducedMotion }) {
+function PanoptoEstimatePanel() {
+  return (
+    <section className={styles.estimatePanel}>
+      <div className={styles.panelHeading}>
+        <span>Budget planning</span>
+        <h3>Panopto estimate range from report</h3>
+        <p>The report does not publish a single fixed list price for institutional licensing, but it provides a practical annual range and median.</p>
+      </div>
+      <div className={styles.estimateGrid}>
+        {panoptoEstimates.map((entry) => (
+          <article
+            key={entry.label}
+            className={joinClasses(styles.estimateCard, entry.recommended && styles.estimateCardRecommended)}
+          >
+            <span>{entry.label}</span>
+            <strong>{formatUSD(entry.annualUsd)} / year</strong>
+            <p>{formatPHP(entry.annualUsd * FX_RATE)} / year</p>
+            <StatusPill tone={entry.recommended ? "signal" : "default"}>
+              {formatUSD(entry.annualUsd / 12)} / month
+            </StatusPill>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FeatureDiveSection({ slideId, onOpenFeature }) {
+  const features = ecosystemFeatureCatalog[slideId] || [];
+
+  return (
+    <section className={styles.sectionBlock}>
+      <div className={styles.panelHeading}>
+        <span>Feature deep dive</span>
+        <h3>Ecosystem feature library</h3>
+        <p>Select any card to open full details for Moodle relevance and role impact.</p>
+      </div>
+
+      <div className={styles.featureDiveGrid}>
+        {features.map((feature) => (
+          <article key={`${slideId}-${feature.id}`} className={joinClasses(styles.featureDiveCard, getProviderThemeClass(slideId))}>
+            <span>{feature.category}</span>
+            <h4>{feature.title}</h4>
+            <p>{feature.summary}</p>
+            <button type="button" className={styles.featureOpenButton} onClick={() => onOpenFeature(slideId, feature)}>
+              Open detail
+            </button>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FeatureModal({ featureState, onClose }) {
+  if (!featureState) {
+    return null;
+  }
+
+  const { slideId, feature } = featureState;
+
+  return (
+    <div className={styles.featureModalOverlay} role="dialog" aria-modal="true" aria-label={feature.title}>
+      <button type="button" className={styles.featureModalBackdrop} aria-label="Close feature detail" onClick={onClose} />
+      <div className={joinClasses(styles.featureModalCard, getProviderThemeClass(slideId))}>
+        <div className={styles.featureModalHeader}>
+          <span>{feature.category}</span>
+          <button type="button" className={styles.featureModalClose} onClick={onClose}>
+            Close
+          </button>
+        </div>
+        <h3>{feature.title}</h3>
+        <p>{feature.summary}</p>
+        <div className={styles.featureModalGrid}>
+          <article>
+            <h4>Moodle relevance</h4>
+            <p>{feature.moodleImpact}</p>
+          </article>
+          <article>
+            <h4>Students</h4>
+            <p>{feature.studentImpact}</p>
+          </article>
+          <article>
+            <h4>Teachers</h4>
+            <p>{feature.teacherImpact}</p>
+          </article>
+          <article>
+            <h4>Admins</h4>
+            <p>{feature.adminImpact}</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProviderPanel({ slide, reducedMotion, onOpenFeature }) {
   return (
     <PanelShell panelKey={slide.id} reducedMotion={reducedMotion}>
       <div className={joinClasses(styles.panelSurface, getProviderThemeClass(slide.id))}>
@@ -837,9 +1169,12 @@ function ProviderPanel({ slide, reducedMotion }) {
           </section>
         </div>
 
+        <FeatureDiveSection slideId={slide.id} onOpenFeature={onOpenFeature} />
+
         <BlueprintPanel title={slide.blueprintTitle} rows={slide.blueprintRows} />
 
         {slide.extra === "vimeo" ? <VimeoDetailPanels /> : null}
+        {slide.id === "panopto" ? <PanoptoEstimatePanel /> : null}
       </div>
     </PanelShell>
   );
@@ -871,48 +1206,82 @@ function ComparisonPanel({ reducedMotion, hoveredColumn, setHoveredColumn }) {
           <div className={styles.panelHeading}>
             <span>Matrix</span>
             <h3>Comparison matrix</h3>
-            <p>Hover a provider column to isolate its value proposition. Non-active columns dim to 40% opacity.</p>
           </div>
 
-          <div className={styles.comparisonColumns}>
-            {providerSlides.map((column) => {
-              const dimmed = hoveredColumn && hoveredColumn !== column.id;
+          <div className={styles.comparisonMatrix}>
+            <div className={styles.matrixMetricHeader}>Metric</div>
+            {providerSlides.map((column) => (
+              <div
+                key={`header-${column.id}`}
+                onMouseEnter={() => setHoveredColumn(column.id)}
+                onMouseLeave={() => setHoveredColumn(null)}
+                className={joinClasses(
+                  styles.matrixHeaderCell,
+                  getProviderThemeClass(column.id),
+                  hoveredColumn && hoveredColumn !== column.id && styles.comparisonColumnDimmed
+                )}
+              >
+                <span>{column.strap}</span>
+                <h3>{column.title}</h3>
+              </div>
+            ))}
 
-              return (
-                <motion.article
-                  initial={reducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
-                  animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.34, ease: EASE, delay: reducedMotion ? 0 : 0.08 + providerSlides.indexOf(column) * 0.05 }}
-                  key={column.id}
-                  onMouseEnter={() => setHoveredColumn(column.id)}
-                  onMouseLeave={() => setHoveredColumn(null)}
-                  className={joinClasses(
-                    styles.comparisonColumn,
-                    getProviderThemeClass(column.id),
-                    dimmed && styles.comparisonColumnDimmed,
-                    column.id === "panopto" && styles.comparisonColumnRecommended
-                  )}
-                >
-                  <div className={styles.comparisonColumnHeader}>
-                    <span>{column.strap}</span>
-                    <h3>{column.title}</h3>
-                    <p>{column.summary}</p>
-                  </div>
+            {comparisonRows.map((row) => (
+              <Fragment key={row.label}>
+                <div className={styles.matrixMetricLabel}>
+                  {row.label}
+                </div>
+                {providerSlides.map((column) => {
+                  const cell = row.values[column.id];
 
-                  <div className={styles.comparisonRows}>
-                    {comparisonRows.map((row) => (
-                      <div className={styles.comparisonRow} key={`${column.id}-${row.label}`}>
-                        <span className={styles.comparisonRowLabel}>{row.label}</span>
-                        <StatusPill tone={row.values[column.id].tone || "default"}>
-                          {row.values[column.id].pill}
-                        </StatusPill>
-                        <p>{row.values[column.id].text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </motion.article>
-              );
-            })}
+                  return (
+                    <motion.div
+                      key={`${row.label}-${column.id}`}
+                      initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+                      animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                      transition={{ duration: 0.28, ease: EASE }}
+                      onMouseEnter={() => setHoveredColumn(column.id)}
+                      onMouseLeave={() => setHoveredColumn(null)}
+                      className={joinClasses(
+                        styles.matrixValueCell,
+                        getProviderThemeClass(column.id),
+                        hoveredColumn && hoveredColumn !== column.id && styles.comparisonColumnDimmed
+                      )}
+                    >
+                      <StatusPill tone={cell.tone || "default"}>{cell.pill}</StatusPill>
+                      <p>{cell.text}</p>
+                    </motion.div>
+                  );
+                })}
+              </Fragment>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.sectionBlock}>
+          <div className={styles.panelHeading}>
+            <span>Ecosystem detail</span>
+            <h3>Detailed context from the report</h3>
+          </div>
+
+          <div className={styles.comparisonDetailGrid}>
+            {comparisonDetailCards.map((card, index) => (
+              <motion.article
+                key={card.id}
+                initial={reducedMotion ? false : { opacity: 0, y: 16, scale: 0.99 }}
+                animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.32, ease: EASE, delay: reducedMotion ? 0 : 0.05 + index * 0.05 }}
+                className={joinClasses(styles.comparisonDetailCard, getProviderThemeClass(card.id))}
+              >
+                <span>{card.ecosystem}</span>
+                <h3>{card.title}</h3>
+                <ul>
+                  {card.points.map((point) => (
+                    <li key={`${card.id}-${point}`}>{point}</li>
+                  ))}
+                </ul>
+              </motion.article>
+            ))}
           </div>
         </section>
 
@@ -921,7 +1290,21 @@ function ComparisonPanel({ reducedMotion, hoveredColumn, setHoveredColumn }) {
             <span>Main takeaways</span>
             <h3>Best fit by priority</h3>
           </div>
-          <OutlookGrid items={comparisonTakeaways} />
+          <div className={styles.takeawayFloatGrid}>
+            {comparisonTakeaways.map((item, index) => (
+              <motion.article
+                key={item.label}
+                initial={reducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
+                animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.34, ease: EASE, delay: reducedMotion ? 0 : 0.08 + index * 0.05 }}
+                className={joinClasses(styles.takeawayFloatCard, getProviderThemeClass(item.label.toLowerCase()), getToneClass(item.tone))}
+              >
+                <span>{item.label} ecosystem</span>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+              </motion.article>
+            ))}
+          </div>
         </section>
       </div>
     </PanelShell>
@@ -933,7 +1316,26 @@ export default function Home() {
   const [activeGroup, setActiveGroup] = useState(navGroups[0].id);
   const [hoveredColumn, setHoveredColumn] = useState(null);
   const [theme, setTheme] = useState("dark");
+  const [activeFeature, setActiveFeature] = useState(null);
   const activeSlide = providerSlides.find((slide) => slide.id === activeGroup);
+
+  useEffect(() => {
+    if (!activeFeature) {
+      return undefined;
+    }
+
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        setActiveFeature(null);
+      }
+    }
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [activeFeature]);
 
   return (
     <main className={joinClasses(styles.pageShell, theme === "light" ? styles.themeLight : styles.themeDark)}>
@@ -955,10 +1357,19 @@ export default function Home() {
               setHoveredColumn={setHoveredColumn}
             />
           ) : (
-            <ProviderPanel key={activeGroup} slide={activeSlide} reducedMotion={reducedMotion} />
+            <ProviderPanel
+              key={activeGroup}
+              slide={activeSlide}
+              reducedMotion={reducedMotion}
+              onOpenFeature={(slideId, feature) => setActiveFeature({ slideId, feature })}
+            />
           )}
         </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {activeFeature ? <FeatureModal featureState={activeFeature} onClose={() => setActiveFeature(null)} /> : null}
+      </AnimatePresence>
     </main>
   );
 }

@@ -149,7 +149,16 @@
 .comparisonColumn,
 .comparisonColumnHeader,
 .comparisonRows,
-.comparisonRow {
+.comparisonRow,
+.comparisonDetailGrid,
+.comparisonDetailCard,
+.takeawayFloatGrid,
+.takeawayFloatCard,
+.featureDiveGrid,
+.featureDiveCard,
+.featureModalCard,
+.featureModalHeader,
+.featureModalGrid {
   display: grid;
 }
 
@@ -488,7 +497,8 @@
 }
 
 .signalCardTop,
-.cardTopline {
+.cardTopline,
+.outlookCardTop {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -546,12 +556,6 @@
   box-shadow: inset 2px 0 0 var(--tone-warning-border);
 }
 
-.toneNegative {
-  --card-accent-soft: var(--tone-negative-bg);
-  border-color: var(--tone-negative-border);
-  box-shadow: inset 2px 0 0 var(--tone-negative-border);
-}
-
 .toneSignal strong,
 .toneSignal h3 {
   color: var(--color-paper);
@@ -565,16 +569,6 @@
 .toneWarning strong,
 .toneWarning h3 {
   color: #ffd36b;
-}
-
-.toneNegative strong,
-.toneNegative h3 {
-  color: #f5b2b5;
-}
-
-.themeLight .toneNegative strong,
-.themeLight .toneNegative h3 {
-  color: #8f2328;
 }
 
 .themeLight .toneWarning strong,
@@ -715,6 +709,13 @@
   line-height: 1.55;
 }
 
+.priceValue {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.03rem;
+  color: var(--color-paper);
+}
+
 .dataTable tbody tr td:first-child {
   color: var(--color-paper);
   font-weight: 600;
@@ -730,6 +731,10 @@
 
 .outlookGrid {
   gap: 0.75rem;
+}
+
+.outlookCardTop h3 {
+  font-weight: 700;
 }
 
 .blueprintGrid {
@@ -752,29 +757,8 @@
   font-size: 1.15rem;
 }
 
-.estimateCardRecommended,
-.comparisonColumnRecommended {
+.estimateCardRecommended {
   box-shadow: inset 2px 0 0 var(--color-signal);
-}
-
-.comparisonColumnRecommended::before {
-  content: "Recommended";
-  position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
-  padding: 0.26rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid rgba(123, 17, 19, 0.4);
-  background: rgba(123, 17, 19, 0.14);
-  color: #f8fafc;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.themeLight .comparisonColumnRecommended::before {
-  color: #7b1113;
-  background: rgba(123, 17, 19, 0.08);
 }
 
 .statusPill {
@@ -810,22 +794,16 @@
   color: #ffe8a4;
 }
 
-.statusPillNegative {
-  border-color: rgba(123, 17, 19, 0.5);
-  background: rgba(123, 17, 19, 0.14);
-  color: #ffd4d4;
-}
-
 .themeLight .statusPillWarning {
   color: #8a6511;
 }
 
-.themeLight .statusPillNegative {
-  color: #7b1113;
-}
-
 .comparisonPanel {
   gap: 1rem;
+}
+
+.comparisonPanel .panelHeading h3 {
+  font-weight: 700;
 }
 
 .comparisonColumns {
@@ -865,6 +843,346 @@
   border-top: 1px solid var(--color-line);
 }
 
+.comparisonMatrix {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.8fr) repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.matrixMetricHeader,
+.matrixHeaderCell,
+.matrixMetricLabel,
+.matrixValueCell {
+  border: 0.5px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, var(--provider-accent-soft, transparent), transparent 72%),
+    var(--surface-bg);
+}
+
+.matrixMetricHeader,
+.matrixHeaderCell {
+  padding: 0.85rem 0.9rem;
+}
+
+.matrixMetricHeader {
+  display: flex;
+  align-items: flex-end;
+  color: var(--color-paper-faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.matrixHeaderCell {
+  display: grid;
+  gap: 0.25rem;
+  box-shadow: inset 0 1px 0 var(--provider-accent-line, transparent);
+}
+
+.matrixHeaderCell span {
+  color: var(--provider-accent-text, var(--color-paper-faint));
+  font-size: 0.73rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.matrixHeaderCell h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-paper);
+  font-weight: 700;
+}
+
+.matrixMetricLabel {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem;
+  color: var(--color-paper);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.matrixValueCell {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+  padding: 0.85rem 0.9rem;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    border-color 220ms ease;
+}
+
+.matrixValueCell p {
+  margin: 0;
+  color: var(--color-paper-soft);
+  line-height: 1.55;
+}
+
+.comparisonDetailGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.comparisonDetailCard {
+  gap: 0.65rem;
+  padding: 0.95rem;
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--surface-border);
+  background:
+    linear-gradient(180deg, var(--provider-accent-soft, transparent), transparent 72%),
+    var(--surface-bg);
+  box-shadow: inset 0 1px 0 var(--provider-accent-line, transparent);
+}
+
+.comparisonDetailCard span {
+  color: var(--provider-accent-text, var(--color-paper-faint));
+  font-size: 0.73rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.comparisonDetailCard h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-paper);
+}
+
+.comparisonDetailCard ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.comparisonDetailCard li {
+  color: var(--color-paper-soft);
+  line-height: 1.55;
+}
+
+.takeawayFloatGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.takeawayFloatCard {
+  position: relative;
+  gap: 0.65rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--surface-border);
+  background:
+    linear-gradient(180deg, var(--provider-accent-soft, transparent), transparent 72%),
+    var(--surface-bg);
+  box-shadow:
+    inset 2px 0 0 var(--provider-accent-line, transparent),
+    0 10px 26px rgba(0, 0, 0, 0.12);
+  animation: floatTakeaway 5.8s ease-in-out infinite;
+}
+
+.takeawayFloatCard:nth-child(2) {
+  animation-delay: 0.45s;
+}
+
+.takeawayFloatCard:nth-child(3) {
+  animation-delay: 0.9s;
+}
+
+.takeawayFloatCard span {
+  color: var(--provider-accent-text, var(--color-paper-faint));
+  font-size: 0.73rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.takeawayFloatCard h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.12;
+  color: var(--color-paper);
+}
+
+.takeawayFloatCard p {
+  margin: 0;
+  color: var(--color-paper-soft);
+  line-height: 1.6;
+}
+
+.featureDiveGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.82rem;
+}
+
+.featureDiveCard {
+  gap: 0.6rem;
+  padding: 0.95rem;
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--surface-border);
+  background:
+    linear-gradient(180deg, var(--provider-accent-soft, transparent), transparent 72%),
+    var(--surface-bg);
+  box-shadow: inset 0 1px 0 var(--provider-accent-line, transparent);
+}
+
+.featureDiveCard span {
+  color: var(--provider-accent-text, var(--color-paper-faint));
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.featureDiveCard h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1.18;
+  color: var(--color-paper);
+}
+
+.featureDiveCard p {
+  margin: 0;
+  color: var(--color-paper-soft);
+  line-height: 1.55;
+}
+
+.featureOpenButton {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.46rem 0.76rem;
+  border-radius: 999px;
+  border: 1px solid var(--provider-accent-line, var(--color-line));
+  background: var(--provider-accent-soft, transparent);
+  color: var(--provider-accent-text, var(--color-paper));
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 200ms ease,
+    transform 200ms ease,
+    background 200ms ease;
+}
+
+.featureOpenButton:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-line-strong);
+}
+
+.featureModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 1.1rem;
+}
+
+.featureModalBackdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(5, 8, 12, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.featureModalCard {
+  position: relative;
+  z-index: 1;
+  width: min(920px, calc(100vw - 2rem));
+  max-height: calc(100svh - 2rem);
+  overflow-y: auto;
+  gap: 0.75rem;
+  padding: 1.1rem;
+  border-radius: var(--radius-xl);
+  border: 0.5px solid var(--surface-border);
+  background:
+    linear-gradient(135deg, var(--provider-accent-soft, transparent), transparent 55%),
+    var(--surface-bg-strong);
+  box-shadow:
+    inset 0 1px 0 var(--provider-accent-line, transparent),
+    0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+.featureModalHeader {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.featureModalHeader span {
+  color: var(--provider-accent-text, var(--color-paper-faint));
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.featureModalClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: var(--surface-bg);
+  color: var(--color-paper);
+  cursor: pointer;
+}
+
+.featureModalCard h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  line-height: 1.12;
+  color: var(--color-paper);
+}
+
+.featureModalCard > p {
+  margin: 0;
+  color: var(--color-paper-soft);
+  line-height: 1.6;
+}
+
+.featureModalGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+.featureModalGrid article {
+  border: 0.5px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-bg);
+  padding: 0.78rem;
+}
+
+.featureModalGrid h4 {
+  margin: 0 0 0.35rem;
+  color: var(--provider-accent-text, var(--color-paper));
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.featureModalGrid p {
+  margin: 0;
+  color: var(--color-paper-soft);
+  line-height: 1.55;
+}
+
 @keyframes floatAura {
   0%,
   100% {
@@ -876,13 +1194,29 @@
   }
 }
 
+@keyframes floatTakeaway {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
 @media (max-width: 1180px) {
   .groupHeader,
   .twoColumnPanels,
   .blueprintGrid,
   .signalRow,
   .estimateGrid,
-  .comparisonColumns {
+  .comparisonColumns,
+  .comparisonDetailGrid,
+  .takeawayFloatGrid,
+  .featureDiveGrid,
+  .featureModalGrid,
+  .comparisonMatrix {
     grid-template-columns: 1fr;
   }
 
