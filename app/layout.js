@@ -1,9 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Vimeo for UPOU's Video Storage Infrastructure",
+  title: "UPOU Executive Briefing Deck",
   description:
-    "Professional strategic evaluation website for UP Open University on Vimeo pricing, bandwidth risk, and enterprise procurement."
+    "Operational Intelligence deck for UPOU Management comparing Vimeo, Panopto, and Kaltura across ODeL delivery, governance, pricing behavior, and infrastructure choice."
 };
 
 export default function RootLayout({ children }) {
